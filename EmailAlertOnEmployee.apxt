@@ -1,0 +1,22 @@
+trigger EmailAlertOnEmployee on Employee__c (before insert,  before update, after insert, after update, after delete ) {
+    
+   
+			if(trigger.isbefore)
+            {
+                if(trigger.isInsert  || trigger.isUpdate)
+                {
+             		EmailTriggerHandler.EmployeeStatus(trigger.new);    
+                     
+		        }
+            }
+
+  
+    	 else if(trigger.isafter)
+    {
+		if(trigger.isInsert || trigger.isUpdate || trigger.isDelete)
+        {
+            
+            PermanentEmpTriggerHandler.calculatePermanentEmployees();
+        }
+    }
+}

@@ -1,0 +1,26 @@
+public class EmailTriggerHandler 
+{ 
+    public static void EmployeeStatus(List<Employee__c> empList)
+    {
+        List<Messaging.SingleEmailMessage> emails= new List<Messaging.SingleEmailMessage>();
+        Messaging.SingleEmailMessage singleMail = new Messaging.SingleEmailMessage();
+        List<String> emailList = new List<String>();
+            for(Employee__c Emp : empList)
+            {
+				if(Emp.Email__c !=NULL && Emp.Permanent_Employee__c == True)
+                {
+                    emailList.add(Emp.Email__c);
+                    singleMail.setToAddresses(emailList);
+                    singleMail.setSubject('Your Permanent Job Confirmation'); 
+      				String body = 'Dear ' + Emp.Name + ', '; 
+      				body += 'According to the EmailAlert trigger';
+      				body += 'your Job is confirmed!';
+      				singleMail.setHtmlBody(body); 	 
+                    emails.add(singleMail);
+    			 	Messaging.sendEmail(emails);
+                    
+                }
+            }      			
+    }
+
+}

@@ -1,0 +1,33 @@
+public class PermanentEmpTriggerHandler {
+     
+    public static void calculatePermanentEmployees ()
+    {     
+		     
+       List<Company__c>  updatePermanentEmployee = new List<Company__c>();
+       
+        for(Company__c parent : [Select Id, Name
+                                from Company__c])
+        {
+            Integer Count = 0;			
+					for(Employee__c child : [Select Company__c, Name , Permanent_Employee__c from Employee__c where Company__c = :parent.Id And Permanent_Employee__c=true ] )
+                    {
+							if(child.Permanent_Employee__c ==True)
+                            {
+                                Count++;
+                            }
+                    }
+            Company__c newCom = new Company__c();
+            newCom.Id = parent.Id;
+            newCom.Total_Permanent_Employees__c= Count;			
+            updatePermanentEmployee.add(newCom);
+            
+        }
+        
+ 				if(!updatePermanentEmployee.isEmpty())
+        			{
+						update updatePermanentEmployee;
+        			}          
+        
+        
+    }
+}
